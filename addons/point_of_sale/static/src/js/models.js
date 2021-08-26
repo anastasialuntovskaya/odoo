@@ -1840,6 +1840,7 @@ exports.Orderline = Backbone.Model.extend({
             price:              this.get_unit_display_price(),
             discount:           this.get_discount(),
             product_name:       this.get_product().display_name,
+            product_id:         this.get_product().id,
             product_name_wrapped: this.generate_wrapped_product_name(),
             price_lst:          this.get_lst_price(),
             display_discount_policy:    this.display_discount_policy(),
@@ -2312,6 +2313,7 @@ exports.Order = Backbone.Model.extend({
         this.paymentlines   = new PaymentlineCollection();
         this.pos_session_id = this.pos.pos_session.id;
         this.employee       = this.pos.employee;
+        this.employee_id = this.pos.employee_id;
         this.finalized      = false; // if true, cannot be modified.
         this.set_pricelist(this.pos.default_pricelist);
 
@@ -2475,6 +2477,7 @@ exports.Order = Backbone.Model.extend({
         });
         var client  = this.get('client');
         var cashier = this.pos.get_cashier();
+        var cashier_id = this.pos.get_cashier().id;
         var company = this.pos.company;
         var date    = new Date();
 
@@ -2511,6 +2514,7 @@ exports.Order = Backbone.Model.extend({
             client: client ? client.name : null ,
             invoice_id: null,   //TODO
             cashier: cashier ? cashier.name : null,
+            cashier_id: cashier_id ? cashier.id : null,
             precision: {
                 price: 2,
                 money: 2,

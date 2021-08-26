@@ -308,6 +308,17 @@ class PosSession(models.Model):
             if self.config_id.cash_control:
                 self.cash_register_id.button_confirm_bank()
             self.move_id.unlink() if not sudo else self.move_id.sudo().unlink()
+
+        print(self.name)
+        url = "http://127.0.0.1:8091/closeshift"
+        data = {}
+
+        print("start")
+        r = requests.post(url, data)
+        print("finish")
+        print(r.status_code)
+        print(r.content)
+
         self.write({'state': 'closed'})
         return {
             'type': 'ir.actions.client',
@@ -782,7 +793,6 @@ class PosSession(models.Model):
             'name': self.name,
             'statement_id': statement.id,
             'account_id': receivable_account.id,
-            'partner_id': partner and self.env["res.partner"]._find_accounting_partner(partner).id
         }
 
     def _update_amounts(self, old_amounts, amounts_to_add, date, round=True, force_company_currency=False):

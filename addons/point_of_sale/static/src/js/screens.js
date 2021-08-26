@@ -1734,6 +1734,27 @@ var ReceiptScreenWidget = ScreenWidget.extend({
     print: function() {
         var self = this;
 
+var order = this.pos.get_order();
+  var export_for_printing11 = order.export_for_printing();
+
+
+
+   console.log(export_for_printing11);
+
+   var data = JSON.stringify(export_for_printing11);
+   var xhr = new XMLHttpRequest();
+var url = "http://127.0.0.1:8091/printcheck";
+xhr.open("POST", url, true);
+xhr.setRequestHeader("Content-Type", "application/json");
+// xhr.onreadystatechange = function () {
+//     if (xhr.readyState === 4 && xhr.status === 200) {
+//         var json = JSON.parse(xhr.responseText);
+//         console.log(json.email + ", " + json.password);
+//     }
+// };
+console.log(export_for_printing11.orderlines[1].quantity);
+xhr.send(data);
+
         if (!this.pos.proxy.printer) { // browser (html) printing
 
             // The problem is that in chrome the print() is asynchronous and doesn't
@@ -1798,7 +1819,7 @@ var ReceiptScreenWidget = ScreenWidget.extend({
         var order_screen_params = order.get_screen_data('params');
         var button_print_invoice = this.$('h2.print_invoice');
         if (order_screen_params && order_screen_params.button_print_invoice) {
-            button_print_invoice.show();
+          //  button_print_invoice.show();
         } else {
             button_print_invoice.hide();
         }
@@ -1832,7 +1853,7 @@ var PaymentScreenWidget = ScreenWidget.extend({
         this.inputbuffer = "";
         this.firstinput  = true;
         this.decimal_point = _t.database.parameters.decimal_point;
-        
+
         // This is a keydown handler that prevents backspace from
         // doing a back navigation. It also makes sure that keys that
         // do not generate a keypress in Chrom{e,ium} (eg. delete,
@@ -1849,7 +1870,7 @@ var PaymentScreenWidget = ScreenWidget.extend({
                 self.keyboard_handler(event);
             }
         };
-        
+
         // This keyboard handler listens for keypress events. It is
         // also called explicitly to handle some keydown events that
         // do not generate keypress events.
@@ -1922,7 +1943,7 @@ var PaymentScreenWidget = ScreenWidget.extend({
         if (this.gui.has_popup()) {
             return;
         }
-        
+
         if (newbuf !== this.inputbuffer) {
             this.inputbuffer = newbuf;
             var order = this.pos.get_order();
@@ -2096,7 +2117,7 @@ var PaymentScreenWidget = ScreenWidget.extend({
         lines.on('click','.paymentline',function(){
             self.click_paymentline($(this).data('cid'));
         });
-            
+
         lines.appendTo(this.$('.paymentlines-container'));
 
         this.render_payment_terminal();
