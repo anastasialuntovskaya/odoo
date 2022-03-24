@@ -91,7 +91,25 @@ odoo.define('point_of_sale.ReceiptScreen', function (require) {
                 this.showScreen(name, props);
             }
             async printReceipt() {
-                const isPrinted = await this._printReceipt();
+
+
+var order =  this.env.pos.get_order();
+  var export_for_printing11 = order.export_for_printing();
+
+
+
+   console.log(export_for_printing11);
+
+   var data = JSON.stringify(export_for_printing11);
+   var xhr = new XMLHttpRequest();
+var url = "http://127.0.0.1:8091/printcheck";
+xhr.open("POST", url, true);
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.send(data);
+
+    const isPrinted = await this._printReceipt();
+
+
                 if (isPrinted) {
                     this.currentOrder._printed = true;
                 }
