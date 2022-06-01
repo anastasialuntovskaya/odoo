@@ -374,11 +374,12 @@ class PosSession(models.Model):
 
 
         # print(self.name)
-        url = "http://127.0.0.1:8091/closeshift"
-        data = {}
+       # url = "http://127.0.0.1:8091/closeshift"
+        #data = {}
 
         # print("start")
-        r = requests.post(url, data)
+
+        #r = requests.post(url, data)
         # print("finish")
         # print(r)
         # print(r.content)
