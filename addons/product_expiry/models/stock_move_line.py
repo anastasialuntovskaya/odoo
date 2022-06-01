@@ -20,7 +20,9 @@ class StockMoveLine(models.Model):
             if move_line.picking_type_use_create_lots:
                 if move_line.product_id.use_expiration_date:
                     if not move_line.expiration_date:
-                        move_line.expiration_date = fields.Datetime.today() + datetime.timedelta(days=move_line.product_id.expiration_time)
+                        move_line.expiration_date = fields.Datetime.today()
+                        # move_line.alert_date = fields.Datetime.today()
+                                                    # + datetime.timedelta(days=move_line.product_id.expiration_time)
                 else:
                     move_line.expiration_date = False
 
@@ -38,7 +40,8 @@ class StockMoveLine(models.Model):
         res = super()._onchange_product_id()
         if self.picking_type_use_create_lots:
             if self.product_id.use_expiration_date:
-                self.expiration_date = fields.Datetime.today() + datetime.timedelta(days=self.product_id.expiration_time)
+                self.expiration_date = fields.Datetime.today()
+                                       # + datetime.timedelta(days=self.product_id.expiration_time)
             else:
                 self.expiration_date = False
         return res

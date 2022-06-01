@@ -106,7 +106,10 @@ class StockProductionLot(models.Model):
         if new_date:
             time_delta = new_date - (self.expiration_date or fields.Datetime.now())
             vals = self._get_date_values(time_delta, new_date)
-            vals['expiration_date'] = new_date
+            vals['expiration_date'] = new_date + datetime.timedelta(days=self.product_id.expiration_time)
+            vals['use_date'] = new_date + datetime.timedelta(days=self.product_id.use_time)
+            vals['removal_date'] = new_date + datetime.timedelta(days=self.product_id.removal_time)
+            vals['alert_date'] = new_date + datetime.timedelta(days=self.product_id.alert_time)
             self.write(vals)
 
     def _get_date_values(self, time_delta, new_date=False):
