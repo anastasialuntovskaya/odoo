@@ -70,6 +70,7 @@ odoo.define('point_of_sale.ClosePosPopup', function(require) {
             }
         }
         openDetailsPopup() {
+             console.log("openDetailsPopup");
             if (this.moneyDetailsRef.comp.isClosed()){
                 this.moneyDetailsRef.comp.openPopup();
                 this.state.payments[this.defaultCashDetails.id].counted = 0;
@@ -143,6 +144,17 @@ odoo.define('point_of_sale.ClosePosPopup', function(require) {
                         return this.handleClosingError(response);
                     }
                 }
+                console.log("closeSession");
+
+                try {
+                    var requestPrinter = myMakeRequest('POST','http://127.0.0.1:8091/closeshift');
+                    var responsePrinter = await requestPrinter;
+                    console.log("result " + responsePrinter);
+                } catch (error) {
+                      console.log("error" + error);
+                    return await this.showPopup('ErrorPopup', {title: 'Error printer 2', body: response.message});
+                }
+
                 await this.rpc({
                     model: 'pos.session',
                     method: 'update_closing_control_state_session',
@@ -195,5 +207,38 @@ odoo.define('point_of_sale.ClosePosPopup', function(require) {
     ClosePosPopup.template = 'ClosePosPopup';
     Registries.Component.add(ClosePosPopup);
 
+
+
+
     return ClosePosPopup;
 });
+
+            function myMakeRequest (method, url) {
+
+              console.log("myMakeRequest" + url);
+
+              return new Promise(function (resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                xhr.open(method, url, true);
+                xhr.onload = function () {
+                  if (xhr.status >= 200 && xhr.status < 300) {
+                      console.log("myMakeRequest success");
+                    resolve(xhr.response);
+                  } else {
+                      console.log("myMakeRequest onerror wrong status code");
+                    reject({
+                      status: xhr.status,
+                      statusText: xhr.statusText
+                    });
+                  }
+                };
+                xhr.onerror = function () {
+                    console.log("myMakeRequest onerror");
+                  reject({
+                    status: xhr.status,
+                    statusText: xhr.statusText
+                  });
+                };
+                xhr.send();
+              });
+            }

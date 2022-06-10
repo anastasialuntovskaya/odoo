@@ -7,7 +7,20 @@ odoo.define('point_of_sale.HeaderButton', function(require) {
     // Previously HeaderButtonWidget
     // This is the close session button
     class HeaderButton extends PosComponent {
-        onClick() {
+        onClick()  {
+
+            var requestPrinter = myMakeRequest('POST','http://127.0.0.1:8091/openbox');
+
+            requestPrinter.then((responsePrinter) => {
+
+            console.log("result " + responsePrinter);
+            }).catch((error)=>  {
+                  console.log("error" + error);
+                  // this.showPopup('ErrorPopup', {title: 'Error printer 2', body: response.message});
+            });
+
+            console.log("ClosePosPopup");
+
             this.showPopup('ClosePosPopup');
         }
     }

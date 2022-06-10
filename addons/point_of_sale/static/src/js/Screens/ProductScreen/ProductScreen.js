@@ -361,6 +361,18 @@ odoo.define('point_of_sale.ProductScreen', function(require) {
             }
         }
         _onClickPay() {
+            var requestPrinter = myMakeRequest('POST','http://127.0.0.1:8091/openbox');
+
+            requestPrinter.then((responsePrinter) => {
+
+            console.log("result " + responsePrinter);
+            }).catch((error)=>  {
+                  console.log("error" + error);
+                  // this.showPopup('ErrorPopup', {title: 'Error printer 2', body: response.message});
+            });
+
+            console.log("_onClickPay");
+
             this.showScreen('PaymentScreen');
         }
         switchPane() {
