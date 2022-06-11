@@ -26,19 +26,7 @@ odoo.define('point_of_sale.CashOpeningPopup', function(require) {
                 }
             }
         }
-        async startSession() {
-
-            console.log("startSession");
-
-            try {
-                var requestPrinter = myMakeRequest('POST','http://127.0.0.1:8091/opensession');
-                var responsePrinter = await requestPrinter;
-                console.log("result " + responsePrinter);
-            } catch (error) {
-                  console.log("error" + error);
-                return await this.showPopup('ErrorPopup', {title: 'Error printer 2', body: response.message});
-            }
-
+        startSession() {
             this.env.pos.bank_statement.balance_start = this.state.openingCash;
             this.env.pos.pos_session.state = 'opened';
             this.rpc({
