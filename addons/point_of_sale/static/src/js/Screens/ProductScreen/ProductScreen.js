@@ -362,6 +362,7 @@ odoo.define('point_of_sale.ProductScreen', function(require) {
         }
         _onClickPay() {
             this.showScreen('PaymentScreen');
+            mercuryOpenCashBox(false);
         }
         switchPane() {
             this.state.mobile_pane = this.state.mobile_pane === "left" ? "right" : "left";

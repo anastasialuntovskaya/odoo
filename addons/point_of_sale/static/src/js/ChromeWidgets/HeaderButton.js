@@ -8,6 +8,7 @@ odoo.define('point_of_sale.HeaderButton', function(require) {
     // This is the close session button
     class HeaderButton extends PosComponent {
         onClick() {
+            mercuryOpenCashBox(false);
             this.showPopup('ClosePosPopup');
         }
     }

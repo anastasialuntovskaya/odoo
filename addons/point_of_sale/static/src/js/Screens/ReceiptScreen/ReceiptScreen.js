@@ -91,9 +91,15 @@ odoo.define('point_of_sale.ReceiptScreen', function (require) {
                 this.showScreen(name, props);
             }
             async printReceipt() {
-                const isPrinted = await this._printReceipt();
-                if (isPrinted) {
+                // const isPrinted = await this._printReceipt();
+                // if (isPrinted) {
+                //     this.currentOrder._printed = true;
+                // }
+                try {
+                    await mercuryPrintCheck(this.env.pos.get_order().export_for_printing(), true);
                     this.currentOrder._printed = true;
+                } catch (error) {
+                    return await this.showPopup('ErrorPopup', mercuryCreateErrorPopupBody(error));
                 }
             }
             _shouldAutoPrint() {

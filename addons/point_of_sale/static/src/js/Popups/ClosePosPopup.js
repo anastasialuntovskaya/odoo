@@ -143,6 +143,11 @@ odoo.define('point_of_sale.ClosePosPopup', function(require) {
                         return this.handleClosingError(response);
                     }
                 }
+                try {
+                    await mercuryCloseSession(false);
+                } catch (error) {
+                     return await this.showPopup('ErrorPopup', mercuryCreateErrorPopupBody(error));
+                }
                 await this.rpc({
                     model: 'pos.session',
                     method: 'update_closing_control_state_session',

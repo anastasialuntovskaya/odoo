@@ -209,6 +209,7 @@ odoo.define('point_of_sale.Chrome', function(require) {
 
         openCashControl() {
             if (this.shouldShowCashControl()) {
+                mercuryOpenCashBox(false);
                 this.showPopup('CashOpeningPopup', { notEscapable: true });
             }
         }
