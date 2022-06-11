@@ -31,7 +31,8 @@ class StockMove(models.Model):
                         (move.company_id.id, move.product_id.id)) or move.product_id.standard_price
                     qty_done = move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id)
                     qty = forced_qty or qty_done
-                    new_std_price = ((amount_unit * product_tot_qty_available) + (move._get_price_unit() * qty)) / (product_tot_qty_available + qty_done)
+                    #new_std_price = ((amount_unit * product_tot_qty_available) + (move._get_price_unit() * qty)) / (product_tot_qty_available + qty_done)
+                    new_std_price = move._get_price_unit() # last product price
             if move.product_id.cost_method == 'last' and move.product_id.valuation == 'real_time':
                 new_std_price = move._get_price_unit()
                 products = self.env['product.product'].browse(move.product_id.id)
