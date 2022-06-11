@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-
-import requests
-
 from collections import defaultdict
 from datetime import timedelta
 
@@ -371,19 +368,6 @@ class PosSession(models.Model):
                 statement.write({'balance_end_real': statement.balance_end})
             statement.button_post()
             statement.button_validate()
-
-
-        # print(self.name)
-       # url = "http://127.0.0.1:8091/closeshift"
-        #data = {}
-
-        # print("start")
-
-        #r = requests.post(url, data)
-        # print("finish")
-        # print(r)
-        # print(r.content)
-
         self.write({'state': 'closed'})
         return True
 
