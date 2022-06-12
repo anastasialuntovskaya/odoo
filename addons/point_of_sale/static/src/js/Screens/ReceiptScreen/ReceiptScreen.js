@@ -95,11 +95,22 @@ odoo.define('point_of_sale.ReceiptScreen', function (require) {
                 // if (isPrinted) {
                 //     this.currentOrder._printed = true;
                 // }
+                if(this.currentOrder._currentlyPrinting === true) {
+                    return await this.showPopup('ErrorPopup', {title: 'Печать уже идет', body: 'подождите'});
+                }
+                if(this.currentOrder._printed === true) {
+                    return await this.showPopup('ErrorPopup', {title: 'Чек уже распечатан', body: ''});
+                }
                 try {
+                    this.currentOrder._currentlyPrinting = true;
                     await mercuryPrintCheck(this.env.pos.get_order().export_for_printing(), true);
                     this.currentOrder._printed = true;
+                     this.currentOrder._currentlyPrinting = false;
                 } catch (error) {
+                     this.currentOrder._currentlyPrinting = false;
                     return await this.showPopup('ErrorPopup', mercuryCreateErrorPopupBody(error));
+                } finally {
+                    this.currentOrder._currentlyPrinting = false;
                 }
             }
             _shouldAutoPrint() {
