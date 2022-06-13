@@ -44,7 +44,8 @@ class SaleOrder(models.Model):
     @api.depends('order_line.product_uom_qty', 'order_line.product_id')
     def _compute_cart_info(self):
         for order in self:
-            order.cart_quantity = int(sum(order.mapped('website_order_line.product_uom_qty')))
+            # order.cart_quantity = int(sum(order.mapped('website_order_line.product_uom_qty')))
+            order.cart_quantity = len(order.order_line.ids)
             order.only_services = all(l.product_id.type == 'service' for l in order.website_order_line)
 
     @api.depends('website_id', 'date_order', 'order_line', 'state', 'partner_id')
@@ -168,12 +169,20 @@ class SaleOrder(models.Model):
 
         try:
             if add_qty:
-                add_qty = int(add_qty)
+                #add_qty = int(add_qty)
+                if product.to_weight:
+                    add_qty = add_qty
+                else:
+                    add_qty = int(add_qty)
         except ValueError:
             add_qty = 1
         try:
             if set_qty:
-                set_qty = int(set_qty)
+                #set_qty = int(set_qty)
+                if product.to_weight:
+                    set_qty = set_qty
+                else:
+                    set_qty = int(set_qty)
         except ValueError:
             set_qty = 0
         quantity = 0
