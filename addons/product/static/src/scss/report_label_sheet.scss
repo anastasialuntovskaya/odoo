@@ -36,6 +36,15 @@
             width: 100%
         }
     }
+    div.o_label_middle_column {
+        float: left;
+        font-size: .6em;
+        overflow:hidden;
+        width: 40%;
+        &.o_label_full_with {
+            width: 100%
+        }
+    }
     div.o_label_right_column {
         float: right;
     }

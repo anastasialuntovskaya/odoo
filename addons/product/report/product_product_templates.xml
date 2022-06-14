@@ -10,13 +10,19 @@
                         <strong t-field="product.display_name"/>
                     </div>
                     <div class="o_label_data">
-                        <div class="text-center o_label_left_column">
+                         <div class="o_label_middle_column" style="width:33%;">
+                            <t t-if="product.x_scale_code > 0">
+                                <p style="margin-bottom:0">Код на весах</p>
+                                <strong style=" font-size: 5em;padding: 10px 0;" t-out="product.x_scale_code"/>
+                             </t>
+                        </div>
+                        <div class="text-center o_label_left_column" style="width:33%">
                             <t t-if="barcode">
                                 <div t-out="barcode" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size}"/>
                                 <span class="text-center" t-out="barcode"/>
                             </t>
                         </div>
-                        <div class="text-right" style="line-height:normal">
+                        <div class="text-right" style="line-height:normal" >
                             <div class="o_label_extra_data">
                                 <t t-out="product.list_price / 2"/>
                                 <t t-out="'грн'"/>
