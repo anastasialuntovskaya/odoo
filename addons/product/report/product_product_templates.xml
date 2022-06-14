@@ -10,13 +10,13 @@
                         <strong t-field="product.display_name"/>
                     </div>
                     <div class="o_label_data">
-                         <div class="o_label_middle_column" style="width:33%;">
+                         <div class="o_label_middle_column" style="width:25%;">
                             <t t-if="product.x_scale_code > 0">
                                 <p style="margin-bottom:0">Код на весах</p>
                                 <strong style=" font-size: 5em;padding: 10px 0;" t-out="product.x_scale_code"/>
                              </t>
                         </div>
-                        <div class="text-center o_label_left_column" style="width:33%">
+                        <div class="text-center o_label_left_column" style="width:25%">
                             <t t-if="barcode">
                                 <div t-out="barcode" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size}"/>
                                 <span class="text-center" t-out="barcode"/>
@@ -31,7 +31,7 @@
                                 <strong class="o_label_price" t-field="product.lst_price" t-options="{'widget': 'monetary', 'label_price': True}"/>
                             </t>
                             <t t-else="">
-                                <strong class="o_label_price" t-field="product.list_price" t-options="{'widget': 'monetary', 'label_price': True}"/>
+                                <strong style="font-size:1.5em" class="o_label_price" t-field="product.list_price" t-options="{'widget': 'monetary', 'label_price': True}"/>
                             </t>
                         </div>
                         <div class="o_label_clear"></div>
