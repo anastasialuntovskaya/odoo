@@ -16,7 +16,9 @@ class ProductLabelLayout(models.TransientModel):
         ('4x7xprice', '4 x 7 with price'),
         ('4x12', '4 x 12'),
         ('4x12xprice', '4 x 12 with price')], string="Format", default='2x7xprice', required=True)
-    custom_quantity = fields.Integer('Quantity', default=1, required=True)
+    # tricky hack we use custom_quantity as Pricelist id because it is hard to add new field in model
+    # custom_quantity = fields.Integer('Quantity', default=1, required=True)
+    custom_quantity = fields.Integer('Pricelist id', default=1, required=True)
     product_ids = fields.Many2many('product.product')
     product_tmpl_ids = fields.Many2many('product.template')
     extra_html = fields.Html('Extra Content', default='')
@@ -56,7 +58,9 @@ class ProductLabelLayout(models.TransientModel):
         # Build data to pass to the report
         data = {
             'active_model': active_model,
-            'quantity_by_product': {p: self.custom_quantity for p in products},
+            # tricky hack we use custom_quantity as Pricelist id because it is hard to add new field in model
+            # 'quantity_by_product': {p: self.custom_quantity for p in products},
+            'quantity_by_product': {p: 1 for p in products},
             'layout_wizard': self.id,
             'price_included': 'xprice' in self.print_format,
         }

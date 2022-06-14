@@ -16,10 +16,23 @@ def _prepare_data(env, data):
     else:
         raise UserError(_('Product model not defined, Please contact your administrator.'))
 
+    layout_wizard = env['product.label.layout'].browse(data.get('layout_wizard'))
+
     total = 0
     quantity_by_product = defaultdict(list)
     for p, q in data.get('quantity_by_product').items():
         product = Product.browse(int(p))
+
+        # special hack to calculate price based on pricelist
+        try:
+            # tricky hack we use custom_quantity as Pricelist id because it is hard to add new field in model
+            pricelist_id = layout_wizard.custom_quantity
+            pricelist = product.env['product.pricelist'].browse(pricelist_id)
+            price = pricelist.get_product_price(product, 1.0, False)
+            product.list_price = price
+        except:
+            print("Something wrong when calculating price based on pricelist")
+
         quantity_by_product[product].append((product.barcode, q))
         total += q
     if data.get('custom_barcodes'):
@@ -28,7 +41,6 @@ def _prepare_data(env, data):
             quantity_by_product[Product.browse(int(product))] += (barcodes_qtys)
             total += sum(qty for _, qty in barcodes_qtys)
 
-    layout_wizard = env['product.label.layout'].browse(data.get('layout_wizard'))
     if not layout_wizard:
         return {}
 
