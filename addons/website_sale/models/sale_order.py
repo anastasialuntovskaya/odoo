@@ -401,7 +401,11 @@ class SaleOrderLine(models.Model):
             To keep it short, instead of using the first line of the description, we take the product name without the internal reference.
         """
         for record in self:
-            record.name_short = record.product_id.with_context(display_default_code=False).display_name
+            product = record.product_id.with_context(display_default_code=False)
+            if product.x_website_name:
+                record.name_short = product.x_website_name
+            else:
+                record.name_short = product.display_name
 
     def get_description_following_lines(self):
         return self.name.splitlines()[1:]

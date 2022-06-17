@@ -176,7 +176,12 @@
             <div class="card-body p-0 o_wsale_product_information">
                 <div class="p-2 o_wsale_product_information_text">
                     <h6 class="o_wsale_products_item_title mb-1">
-                        <a class="text-primary text-decoration-none" itemprop="name" t-att-href="product_href" t-att-content="product.name" t-field="product.name" />
+                        <t t-if="product.x_website_name">
+                             <a class="text-primary text-decoration-none" itemprop="name" t-att-href="product_href" t-att-content="product.x_website_name" t-field="product.x_website_name" />
+                        </t>
+                        <t t-else="">
+                             <a class="text-primary text-decoration-none" itemprop="name" t-att-href="product_href" t-att-content="product.name" t-field="product.name" />
+                        </t>
                         <a role="button" t-if="not product.website_published" t-att-href="product_href" class="btn btn-sm btn-danger" title="This product is unpublished.">Unpublished</a>
                     </h6>
                     <div class="product_price mb-1" itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer">
@@ -602,7 +607,12 @@
                             <t t-call="website_sale.shop_product_carousel"/>
                         </div>
                         <div class="col-md-6 mt-md-4" id="product_details">
-                            <h1 itemprop="name" t-field="product.name">Product Name</h1>
+                            <t t-if="product.x_website_name">
+                                 <h1 itemprop="name" t-field="product.x_website_name">Product Name</h1>
+                            </t>
+                            <t t-else="">
+                                 <h1 itemprop="name" t-field="product.name">Product Name</h1>
+                            </t>
                             <span itemprop="url" style="display:none;" t-esc="product.website_url"/>
                             <t t-if="is_view_active('website_sale.product_comment')">
                                 <a href="#o_product_page_reviews" class="o_product_page_reviews_link text-decoration-none">
