@@ -9,7 +9,7 @@ odoo.define('point_of_sale.SetPricelistButton', function(require) {
     class SetPricelistButton extends PosComponent {
         constructor() {
             super(...arguments);
-            useListener('click', this.onClick);
+           // useListener('click', this.onClick);
         }
         mounted() {
             this.env.pos.get('orders').on('add remove change', () => this.render(), this);
