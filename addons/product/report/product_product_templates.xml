@@ -31,11 +31,14 @@
                                 <strong class="o_label_price" t-field="product.lst_price" t-options="{'widget': 'monetary', 'label_price': True}"/>
                             </t>
                             <t t-else="">
-                                <strong style="font-size:1.5em" class="o_label_price" t-field="product.list_price" t-options="{'widget': 'monetary', 'label_price': True}"/>
+                                <strong style="font-size:1.5em" class="o_label_price" t-out="int(product.list_price)"/>
+                                 <t t-out="'руб/'"/>
+                                 <t t-out="product.uom_name"/>
                             </t>
                         </div>
-                        <div class="o_label_clear"></div>
                     </div>
+                    <div  style="font-size:0.5em; text-align:center" >ФЛП Нижельская Е.Я.</div>
+                     <div class="o_label_clear"></div>
                 </div>
             </td>
         </template>
