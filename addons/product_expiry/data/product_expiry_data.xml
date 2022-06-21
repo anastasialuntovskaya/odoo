@@ -11,5 +11,31 @@
             <field name="icon">fa-tasks</field>
             <field name="delay_count">0</field>
         </record>
+    <record id="mail_template_data_product_expire_soon" model="mail.template">
+        <field name="name">Product: Expire Soon</field>
+        <field name="model_id" ref="model_stock_production_lot"/>
+        <field name="subject">Предупреждение об истечении срока годности: {{ object.product_id.display_name }}</field>
+        <field name="email_to">{{ object.activity_user_id.email_formatted }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p>Срок годности продукта <a t-att-href="'web#id=%s&amp;cids=1&amp;model=product.product&amp;view_type=form' % object.product_id.id" target="_blank" t-out="object.product_id.display_name"></a>
+        с номером лота <a t-att-href="'web#id=%s&amp;cids=1&amp;menu_id=172&amp;action=300&amp;model=stock.production.lot&amp;view_type=form' % object.id" target="_blank" t-out="object.display_name"></a> подходит к концу. </p>
+    <p>Продукт должен быть удален: <t t-out="object.removal_date or ''"></t></p>
+    <p>Дата окончания срока годности: <t t-out="object.use_date or ''"></t></p>
+</div>
+        </field>
+    </record>
+      <record id="mail_template_data_product_expired" model="mail.template">
+        <field name="name">Product: Expired</field>
+        <field name="model_id" ref="model_stock_production_lot"/>
+        <field name="subject">Срок годности истек: {{ object.product_id.display_name }}</field>
+        <field name="email_to">{{ object.activity_user_id.email_formatted }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p>Срок годности продукта <a t-att-href="'web#id=%s&amp;cids=1&amp;model=product.product&amp;view_type=form' % object.product_id.id" target="_blank" t-out="object.product_id.display_name"></a>
+        с номером лота <a t-att-href="'web#id=%s&amp;cids=1&amp;menu_id=172&amp;action=300&amp;model=stock.production.lot&amp;view_type=form' % object.id" target="_blank" t-out="object.display_name"></a> истек. </p>
+</div>
+        </field>
+    </record>
 </odoo>
 
