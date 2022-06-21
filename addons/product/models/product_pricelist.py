@@ -656,7 +656,7 @@ class PricelistItem(models.Model):
             price_limit = price
             price = (price - (price * (self.price_discount / 100))) or 0.0
             if self.price_round:
-                price = tools.float_round(price, precision_rounding=self.price_round)
+                price = tools.float_round(price, precision_rounding=self.price_round, rounding_method='UP')
 
             if self.price_surcharge:
                 price_surcharge = convert_to_price_uom(self.price_surcharge)
