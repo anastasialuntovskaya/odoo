@@ -52,6 +52,7 @@
                 <group col="4" colspan="4" name="order_fields">
                     <field name="name"/>
                     <field name="date_order"/>
+                    <field name="x_mercuryprinted"/>
                     <field name="session_id" />
                     <field string="User" name="user_id"/>
                     <field name="partner_id" context="{'res_partner_search_mode': 'customer'}" attrs="{'readonly': [('state','=','invoiced')]}"/>

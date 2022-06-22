@@ -2826,6 +2826,7 @@ exports.Order = Backbone.Model.extend({
         this.pos            = options.pos;
         this.selected_orderline   = undefined;
         this.selected_paymentline = undefined;
+        this.x_mercuryprinted = false;
         this.screen_data    = {};  // see Gui
         this.temporary      = options.temporary || false;
         this.creation_date  = new Date();
@@ -2971,6 +2972,7 @@ exports.Order = Backbone.Model.extend({
         this.isFromClosedSession = json.is_session_closed;
         this.is_tipped = json.is_tipped || false;
         this.tip_amount = json.tip_amount || 0;
+        this.x_mercuryprinted = json.x_mercuryprinted;
     },
     export_as_JSON: function() {
         var orderLines, paymentLines;
@@ -3003,6 +3005,7 @@ exports.Order = Backbone.Model.extend({
             to_ship: this.to_ship ? this.to_ship : false,
             is_tipped: this.is_tipped || false,
             tip_amount: this.tip_amount || 0,
+            x_mercuryprinted: this.x_mercuryprinted || false,
         };
         if (!this.is_paid && this.user_id) {
             json.user_id = this.user_id;

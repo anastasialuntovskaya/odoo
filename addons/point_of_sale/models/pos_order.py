@@ -857,6 +857,7 @@ class PosOrder(models.Model):
             'id': order.id,
             'is_tipped': order.is_tipped,
             'tip_amount': order.tip_amount,
+            'x_mercuryprinted': order.x_mercuryprinted,
         }
 
     def _get_fields_for_order_line(self):

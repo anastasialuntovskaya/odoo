@@ -20,7 +20,26 @@ odoo.define('point_of_sale.ReprintReceiptScreen', function (require) {
                 }
             }
             async tryReprint() {
-                await this._printReceipt();
+                // await this._printReceipt();
+                  let props = this.props;
+                 let order = props.order;
+              if(order._currentlyPrinting === true) {
+                    return await this.showPopup('ErrorPopup', {title: 'Печать уже идет', body: 'подождите'});
+                }
+                if(order._printed === true) {
+                    return await this.showPopup('ErrorPopup', {title: 'Чек уже распечатан', body: ''});
+                }
+                try {
+                    order._currentlyPrinting = true;
+                    await mercuryPrintCheck(order.export_for_printing(), true);
+                    order._printed = true;
+                     order._currentlyPrinting = false;
+                } catch (error) {
+                     order._currentlyPrinting = false;
+                    return await this.showPopup('ErrorPopup', mercuryCreateErrorPopupBody(error));
+                } finally {
+                   order._currentlyPrinting = false;
+                }
             }
         }
         ReprintReceiptScreen.template = 'ReprintReceiptScreen';
