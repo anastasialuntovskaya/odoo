@@ -1412,7 +1412,7 @@
                                             <label class="col-form-label" for="street">Street <span class="d-none d-md-inline"> and Number</span></label>
                                             <input type="text" name="street" t-attf-class="form-control #{error.get('street') and 'is-invalid' or ''}" t-att-value="'street' in checkout and checkout['street']" />
                                         </div>
-                                        <div t-attf-class="form-group #{error.get('street2') and 'o_has_error' or ''} col-lg-12 div_street2">
+                                        <div style="display:none" t-attf-class="form-group #{error.get('street2') and 'o_has_error' or ''} col-lg-12 div_street2">
                                             <label class="col-form-label label-optional" for="street2">Street 2</label>
                                             <input type="text" name="street2" t-attf-class="form-control #{error.get('street2') and 'is-invalid' or ''}" t-att-value="'street2' in checkout and checkout['street2']" />
                                         </div>
@@ -1430,22 +1430,25 @@
                                         </div>
                                         <t t-if="'zip' in zip_city and zip_city.index('zip') &gt; zip_city.index('city')">
                                             <div t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''} col-md-4 div_zip">
-                                                <label class="col-form-label label-optional" for="zip">Zip Code</label>
-                                                <input type="text" name="zip" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}" t-att-value="'zip' in checkout and checkout['zip']" />
+                                                <label style="display:none" class="col-form-label label-optional" for="zip">Zip Code</label>
+                                                <input style="display:none" type="text" name="zip" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}" t-att-value="83000" />
                                             </div>
                                         </t>
                                         <div class="w-100"/>
-                                        <div t-attf-class="form-group #{error.get('country_id') and 'o_has_error' or ''} col-lg-6 div_country">
-                                            <label class="col-form-label" for="country_id">Country</label>
-                                            <select id="country_id" name="country_id" t-attf-class="form-control #{error.get('country_id') and 'is-invalid' or ''}" t-att-mode="mode[1]">
-                                                <option value="">Country...</option>
-                                                <t t-foreach="countries" t-as="c">
-                                                    <option t-att-value="c.id" t-att-selected="c.id == (country and country.id or -1)">
-                                                        <t t-esc="c.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
+                                        <div style="display:none">
+                                            <div t-attf-class="form-group #{error.get('country_id') and 'o_has_error' or ''} col-lg-6 div_country">
+                                                <label class="col-form-label" for="country_id">Country</label>
+                                                <select id="country_id" name="country_id" t-attf-class="form-control #{error.get('country_id') and 'is-invalid' or ''}" t-att-mode="mode[1]">
+                                                    <option value="">Country...</option>
+                                                    <t t-foreach="countries" t-as="c">
+                                                        <option t-att-value="c.id" t-att-selected="229">
+                                                            <t t-esc="c.name" />
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
                                         </div>
+
                                         <div t-attf-class="form-group #{error.get('state_id') and 'o_has_error' or ''} col-lg-6 div_state" t-att-style="(not country or not country.state_ids) and 'display: none'">
                                             <label class="col-form-label" for="state_id">State / Province</label>
                                             <select name="state_id" t-attf-class="form-control #{error.get('state_id') and 'is-invalid' or ''}" data-init="1">
@@ -1506,7 +1509,7 @@
                     <input type="text" name="company_name" t-attf-class="form-control #{error.get('company_name') and 'is-invalid' or ''}" t-att-value="'commercial_company_name' in checkout and checkout['commercial_company_name'] or 'company_name' in checkout and checkout['company_name']" t-att-readonly="'1' if vat_warning else None" />
                     <small t-if="vat_warning" class="form-text text-muted d-block d-lg-none">Changing company name is not allowed once document(s) have been issued for your account. Please contact us directly for this operation.</small>
                 </div>
-                <div t-attf-class="form-group #{error.get('vat') and 'o_has_error' or ''} col-lg-6 div_vat mb-0">
+                <div style="display:none" t-attf-class="form-group #{error.get('vat') and 'o_has_error' or ''} col-lg-6 div_vat mb-0">
                     <label class="col-form-label font-weight-normal label-optional" for="vat">TIN / VAT </label>
                     <input type="text" name="vat" t-attf-class="form-control #{error.get('vat') and 'is-invalid' or ''}" t-att-value="'vat' in checkout and checkout['vat']" t-att-readonly="'1' if vat_warning else None"/>
                     <small t-if="vat_warning" class="form-text text-muted d-block d-lg-none">Changing VAT number is not allowed once document(s) have been issued for your account. Please contact us directly for this operation.</small>

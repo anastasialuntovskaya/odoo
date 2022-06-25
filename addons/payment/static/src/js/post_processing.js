@@ -121,7 +121,7 @@ odoo.define('payment.post_processing', function (require) {
             this.$el.find('div[name="o_payment_status_content"]').html(html);
         },
         displayLoading: function () {
-            var msg = _t("We are processing your payment, please wait ...");
+            var msg = _t("Мы обрабатываем ваш заказ...");
             $.blockUI({
                 'message': '<h2 class="text-white"><img src="/web/static/img/spin.png" class="fa-pulse"/>' +
                     '    <br />' + msg +

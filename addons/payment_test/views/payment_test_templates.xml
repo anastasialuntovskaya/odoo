@@ -9,7 +9,7 @@
                     <input name="partner_id" type="hidden" t-att-value="partner_id"/>
                 </div>
                 <div class="form-group col-lg-12">
-                    <input type="text" name="customer_input" id="customer_input" class="form-control"
+                    <input style="visibility: hidden;" type="text" name="customer_input" id="customer_input" class="form-control"
                            placeholder="Test Card Information"/>
                 </div>
             </div>

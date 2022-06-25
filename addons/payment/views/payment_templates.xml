@@ -62,10 +62,10 @@
                                 <b t-esc="acquirer.display_as or acquirer.name"/>
                             </span>
                             <!-- === "Test Mode" badge === -->
-                            <span t-if="acquirer.state == 'test'"
-                                  class="badge-pill badge-warning ml-1">
-                                Test Mode
-                            </span>
+<!--                            <span t-if="acquirer.state == 'test'"-->
+<!--                                  class="badge-pill badge-warning ml-1">-->
+<!--                                Test Mode-->
+<!--                            </span>-->
                             <!-- === Extra fees badge === -->
                             <t t-if="fees_by_acquirer.get(acquirer)">
                                 <span class="badge-pill badge-secondary ml-1">
