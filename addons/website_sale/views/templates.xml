@@ -347,9 +347,9 @@
 
     <template id="sort" inherit_id="website_sale.products" customize_show="True" name="Show Sort by">
         <xpath expr="//div[hasclass('products_header')]/t[@t-call='website_sale.pricelist_list']" position="after">
-            <t t-set="list_price_asc_label">Price - Low to High</t>
-            <t t-set="list_price_desc_label">Price - High to Low</t>
-            <t t-set="newest_arrivals_desc_label">Newest arrivals</t>
+            <t t-set="list_price_asc_label">Цена - Сначала дешевле</t>
+            <t t-set="list_price_desc_label">Цена - Сначала дороже</t>
+            <t t-set="newest_arrivals_desc_label">Новые поступления</t>
             <t t-set="name_asc_label">Name</t>
             <t t-set="website_sale_sortable" t-value="[
                 (list_price_asc_label, 'list_price asc'),
@@ -366,7 +366,7 @@
                             <t t-esc="website_sale_sortable_current[0][0]"/>
                         </t>
                         <t t-else='1'>
-                            Featured
+                            Избранное
                         </t>
                     </span>
                     <i class="fa fa-sort-amount-asc d-lg-none"/>
@@ -1178,7 +1178,7 @@
                     </t>
                 </span>
                 <a role="button" class="btn btn-primary" href="/shop/cart">
-                       View Cart (<t t-esc="website_sale_order.cart_quantity" /> item(s))
+                       View Cart (<t t-esc="website_sale_order.cart_quantity" /> товар(ов))
                      </a>
             </div>
         </t>
@@ -1395,7 +1395,7 @@
                                 <form action="/shop/address" method="post" class="checkout_autoformat">
                                     <div class="form-row">
                                         <div t-attf-class="form-group #{error.get('name') and 'o_has_error' or ''} col-lg-12 div_name">
-                                            <label class="col-form-label" for="name">Name</label>
+                                            <label class="col-form-label" for="name">ФИО</label>
                                             <input type="text" name="name" t-attf-class="form-control #{error.get('name') and 'is-invalid' or ''}" t-att-value="'name' in checkout and checkout['name']" />
                                         </div>
                                         <div class="w-100"/>
@@ -1409,7 +1409,7 @@
                                         </div>
                                         <div class="w-100"/>
                                         <div t-attf-class="form-group #{error.get('street') and 'o_has_error' or ''} col-lg-12 div_street">
-                                            <label class="col-form-label" for="street">Street <span class="d-none d-md-inline"> and Number</span></label>
+                                            <label class="col-form-label" for="street">Адрес <span style="display:none" class="d-none d-md-inline"></span></label>
                                             <input type="text" name="street" t-attf-class="form-control #{error.get('street') and 'is-invalid' or ''}" t-att-value="'street' in checkout and checkout['street']" />
                                         </div>
                                         <div style="display:none" t-attf-class="form-group #{error.get('street2') and 'o_has_error' or ''} col-lg-12 div_street2">
@@ -1486,7 +1486,7 @@
                                             <span>Back</span>
                                         </a>
                                         <a role="button" href="#" class="btn btn-primary mb32 a-submit a-submit-disable a-submit-loading">
-                                            <span>Next</span>
+                                            Подтвердить
                                             <i class="fa fa-chevron-right"/>
                                         </a>
                                     </div>
@@ -1527,7 +1527,7 @@
                 <a class="float-right no-decoration" href="/shop/checkout"><i class="fa fa-edit"/> Edit</a>
                 <t t-set="same_shipping" t-value="bool(order.partner_shipping_id==order.partner_id or only_services)" />
                 <div>
-                    <b>Billing<t t-if="same_shipping and not only_services"> &amp; Shipping</t>: </b>
+                    <b>Адрес доставки<span style="display:none"><t t-if="same_shipping and not only_services"> &amp; Shipping</t></span>: </b>
                     <span t-esc="order.partner_id" t-options="dict(widget='contact', fields=['address'], no_marker=True, separator=', ')" class="address-inline"/>
                 </div>
                 <div t-if="not same_shipping and not only_services" groups="sale.group_delivery_invoice_address">
@@ -1573,10 +1573,10 @@
 
                             <t t-if="website_sale_order.amount_total">
                                 <div t-if="acquirers or tokens" id="payment_method" class="mt-3">
-                                    <h3 class="mb24">Pay with </h3>
+                                    <h3 class="mb24">Способ оплаты:</h3>
                                     <t t-call="payment.checkout">
                                         <t t-set="footer_template_id" t-value="'website_sale.payment_footer'"/>
-                                        <t t-set="submit_button_label">Pay Now</t>
+                                        <t t-set="submit_button_label">Подтвердить заказ</t>
                                     </t>
                                 </div>
                                 <div t-else="" class="alert alert-warning">
@@ -1596,7 +1596,7 @@
                                 <form target="_self" action="/shop/payment/validate" method="post">
                                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
                                     <t t-call="website_sale.payment_footer">
-                                        <t t-set="submit_button_label">Confirm Order</t>
+                                        <t t-set="submit_button_label">Подтвердить заказ</t>
                                     </t>
                                 </form>
                             </div>
@@ -1613,7 +1613,7 @@
              class="custom-control custom-checkbox mt-2 o_accept_tc_button"/>
         <div class="float-left mt-2">
             <a role="button" href="/shop/cart" class="btn btn-secondary">
-                <i class="fa fa-chevron-left"/> Return to Cart
+                <i class="fa fa-chevron-left"/> Вернуться в корзину
             </a>
         </div>
         <div class="float-right mt-2">
@@ -1759,7 +1759,7 @@
                                 <div class="card mt-3">
                                   <div class="card-body">
                                     <t t-set="same_shipping" t-value="bool(order.partner_shipping_id==order.partner_id or only_services)" />
-                                    <div><b>Billing <t t-if="same_shipping and not only_services"> &amp; Shipping</t>: </b><span t-esc='order.partner_id' t-options="dict(widget='contact', fields=['address'], no_marker=True, separator=', ')" class="address-inline"/></div>
+                                      <div><b>Адрес доставки<span style="display:none"><t t-if="same_shipping and not only_services"> &amp; Shipping</t></span>: </b><span t-esc='order.partner_id' t-options="dict(widget='contact', fields=['address'], no_marker=True, separator=', ')" class="address-inline"/></div>
                                     <div t-if="not same_shipping and not only_services" groups="sale.group_delivery_invoice_address"><b>Shipping: </b><span t-esc='order.partner_shipping_id' t-options="dict(widget='contact', fields=['address'], no_marker=True, separator=', ')"  class="address-inline"/></div>
                                   </div>
                                 </div>
@@ -1793,7 +1793,7 @@
                           <span t-field="website_sale_order.amount_untaxed" class="monetary_field" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}"/>
                       </td>
                   </tr>
-                  <tr id="order_total_taxes">
+                  <tr style="display:none" id="order_total_taxes">
                       <td class="text-right border-0">Taxes:</td>
                       <td class="text-xl-right border-0">
                            <span t-field="website_sale_order.amount_tax" class="monetary_field" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />
@@ -1845,7 +1845,7 @@
                         <t t-out="payment_tx_id.acquirer_id.sudo().pending_msg"/>
                     </t>
                     <t t-if="payment_tx_id.state == 'done'">
-                        <span t-if='payment_tx_id.acquirer_id.sudo().done_msg' t-out="payment_tx_id.acquirer_id.sudo().done_msg"/>
+                        <span t-if='payment_tx_id.acquirer_id.sudo().done_msg'>Ваш заказ принят в обработку, спасибо!</span>
                     </t>
                     <t t-if="payment_tx_id.state == 'cancel'">
                         <t t-out="payment_tx_id.acquirer_id.sudo().cancel_msg"/>

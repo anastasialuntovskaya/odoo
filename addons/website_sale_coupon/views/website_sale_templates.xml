@@ -27,13 +27,13 @@
         <t t-if="website_sale_order and website_sale_order.applied_coupon_ids">
             <t t-foreach="website_sale_order.applied_coupon_ids" t-as="coupon">
                 <div class="alert alert-success text-left mt16" role="alert">
-                    You have successfully applied following promo code: <strong t-esc="coupon.code"/>
+                    Промокод успешно применен: <strong t-esc="coupon.code"/>
                 </div>
             </t>
         </t>
         <t t-if="website_sale_order and website_sale_order.promo_code">
             <div class="alert alert-success text-left mt16" role="alert">
-                You have successfully applied following promo code: <strong t-esc="website_sale_order.promo_code"/>
+                Промокод успешно применен: <strong t-esc="website_sale_order.promo_code"/>
             </div>
         </t>
         <t t-if="website_sale_order and website_sale_order.generated_coupon_ids">
@@ -45,7 +45,7 @@
         </t>
         <t t-if="request.params.get('code_not_available')">
             <div class="alert alert-danger text-left mt16" role="alert">
-                Invalid or expired promo code.
+                Неправильный промокод.
             </div>
         </t>
         <t t-if="website_sale_order.get_promo_code_error(delete=False)">
