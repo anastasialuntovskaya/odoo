@@ -1431,7 +1431,7 @@
                                         <t t-if="'zip' in zip_city and zip_city.index('zip') &gt; zip_city.index('city')">
                                             <div t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''} col-md-4 div_zip">
                                                 <label style="display:none" class="col-form-label label-optional" for="zip">Zip Code</label>
-                                                <input style="display:none" type="text" name="zip" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}" t-att-value="83000" />
+                                                <input type="text" name="zip" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}" t-att-value="'zip' in checkout and checkout['zip']" />
                                             </div>
                                         </t>
                                         <div class="w-100"/>
@@ -1441,7 +1441,8 @@
                                                 <select id="country_id" name="country_id" t-attf-class="form-control #{error.get('country_id') and 'is-invalid' or ''}" t-att-mode="mode[1]">
                                                     <option value="">Country...</option>
                                                     <t t-foreach="countries" t-as="c">
-                                                        <option t-att-value="c.id" t-att-selected="229">
+<!--                                                        229 - Ukraine-->
+                                                        <option t-att-value="c.id" t-att-selected="c.id == 229">
                                                             <t t-esc="c.name" />
                                                         </option>
                                                     </t>
