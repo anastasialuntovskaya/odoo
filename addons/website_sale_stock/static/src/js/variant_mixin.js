@@ -72,6 +72,9 @@ VariantMixin._onChangeCombinationStock = function (ev, $parent, combination) {
             .remove();
         combination.has_out_of_stock_message = $(combination.out_of_stock_message).text() !== '';
         combination.out_of_stock_message = Markup(combination.out_of_stock_message);
+        if(!Number.isInteger(combination.free_qty)) {
+            combination.free_qty = combination.free_qty.toFixed(2);
+        }
         const $message = $(QWeb.render(
             'website_sale_stock.product_availability',
             combination
