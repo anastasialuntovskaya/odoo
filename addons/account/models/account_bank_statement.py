@@ -121,11 +121,12 @@ class AccountBankStatement(models.Model):
     @api.depends('previous_statement_id', 'previous_statement_id.balance_end_real')
     def _compute_starting_balance(self):
         for statement in self:
-            if statement.previous_statement_id.balance_end_real != statement.balance_start:
-                statement.balance_start = statement.previous_statement_id.balance_end_real
-            else:
-                # Need default value
-                statement.balance_start = statement.balance_start or 0.0
+            statement.balance_start = statement.balance_start or 0.0
+            # if statement.previous_statement_id.balance_end_real != statement.balance_start:
+            #     statement.balance_start = statement.previous_statement_id.balance_end_real
+            # else:
+            #     # Need default value
+            #     statement.balance_start = statement.balance_start or 0.0
 
     @api.depends('previous_statement_id', 'previous_statement_id.balance_end_real')
     def _compute_ending_balance(self):
