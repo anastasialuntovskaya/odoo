@@ -237,6 +237,24 @@ function _mercuryMakeRequest(method, relativeUrlPath, isNeedStopOnFail, dataDict
     });
 }
 
+function mercuryCashIn(amount, isNeedStopOnFail) {
+    if (mercuryLoggingEnabled)
+        console.log("mercuryCashIn");
+
+    return _mercuryMakeRequest('POST', 'cashin', isNeedStopOnFail, {
+        'amount': amount,
+    },);
+}
+
+function mercuryCashOut(amount, isNeedStopOnFail) {
+    if (mercuryLoggingEnabled)
+        console.log("mercuryCashOut");
+
+    return _mercuryMakeRequest('POST', 'cashout', isNeedStopOnFail, {
+        'amount': amount,
+    },);
+}
+
 function mercuryOpenCashBox(isNeedStopOnFail) {
     if (mercuryLoggingEnabled)
         console.log("mercuryOpenCashBox");

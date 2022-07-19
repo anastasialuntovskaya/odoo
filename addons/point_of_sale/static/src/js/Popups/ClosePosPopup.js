@@ -145,6 +145,7 @@ odoo.define('point_of_sale.ClosePosPopup', function(require) {
                 }
                 try {
                     await mercuryCloseSession(false);
+                    await mercuryCashOut(this.state.payments[this.defaultCashDetails.id].counted, false);
                 } catch (error) {
                      return await this.showPopup('ErrorPopup', mercuryCreateErrorPopupBody(error));
                 }

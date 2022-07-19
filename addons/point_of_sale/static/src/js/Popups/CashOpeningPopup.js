@@ -28,6 +28,7 @@ odoo.define('point_of_sale.CashOpeningPopup', function(require) {
         }
         async startSession() {
             await mercuryOpenSession(false);
+            await mercuryCashIn(this.state.openingCash, false);
             this.env.pos.bank_statement.balance_start = this.state.openingCash;
             this.env.pos.pos_session.state = 'opened';
             this.rpc({

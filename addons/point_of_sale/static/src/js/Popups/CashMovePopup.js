@@ -17,8 +17,9 @@ odoo.define('point_of_sale.CashMovePopup', function (require) {
             this.inputAmountRef = owl.hooks.useRef('input-amount-ref');
         }
         confirm() {
+            var amount;
             try {
-                parse.float(this.state.inputAmount);
+                amount = parse.float(this.state.inputAmount);
             } catch (error) {
                 this.state.inputHasError = true;
                 this.errorMessage = this.env._t('Invalid amount');
@@ -29,6 +30,13 @@ odoo.define('point_of_sale.CashMovePopup', function (require) {
                 this.errorMessage = this.env._t('Select either Cash In or Cash Out before confirming.');
                 return;
             }
+
+            if(this.state.inputType == 'in') {
+                mercuryCashIn(amount, false);
+            } else if(this.state.inputType == 'out') {
+                mercuryCashOut(amount, false);
+            }
+
             return super.confirm();
         }
         onClickButton(type) {
