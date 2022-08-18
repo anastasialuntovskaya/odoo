@@ -1708,6 +1708,29 @@ exports.Product = Backbone.Model.extend({
         }
         return this.pos.units_by_id[unit_id];
     },
+    round_precision_up: function (value, precision) {
+        if (!value) {
+            return 0;
+        } else if (!precision || precision < 0) {
+            precision = 1;
+        }
+        var normalized_value = value / precision;
+        var epsilon_magnitude = Math.log(Math.abs(normalized_value))/Math.log(2);
+        var epsilon = Math.pow(2, epsilon_magnitude - 52);
+        normalized_value += normalized_value >= 0 ? epsilon : -epsilon;
+
+        /**
+         * Javascript performs strictly the round half up method, which is asymmetric. However, in
+         * Python, the method is symmetric. For example:
+         * - In JS, Math.round(-0.5) is equal to -0.
+         * - In Python, round(-0.5) is equal to -1.
+         * We want to keep the Python behavior for consistency.
+         */
+        var sign = normalized_value < 0 ? -1.0 : 1.0;
+        var rounded_value = sign * Math.round(Math.ceil(normalized_value));
+        return rounded_value * precision;
+    },
+
     // Port of get_product_price on product.pricelist.
     //
     // Anything related to UOM can be ignored, the POS will always use
@@ -1771,7 +1794,8 @@ exports.Product = Backbone.Model.extend({
                 var price_limit = price;
                 price = price - (price * (rule.price_discount / 100));
                 if (rule.price_round) {
-                    price = round_pr(price, rule.price_round);
+                    //price = round_pr(price, rule.price_round);
+                    price = self.round_precision_up(price, rule.price_round);
                 }
                 if (rule.price_surcharge) {
                     price += rule.price_surcharge;
