@@ -85,7 +85,13 @@ odoo.define('point_of_sale.ReceiptScreen', function (require) {
                     }
                 }
             }
-            orderDone() {
+            async orderDone() {
+
+
+                if(!(this.currentOrder._printed === true)) {
+                    return await this.showPopup('ErrorPopup', {title: 'Чек не напечатан', body: ''});
+                }
+
                 this.currentOrder.finalize();
                 const { name, props } = this.nextScreen;
                 this.showScreen(name, props);
