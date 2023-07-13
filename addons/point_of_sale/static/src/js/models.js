@@ -363,7 +363,7 @@ exports.PosModel = Backbone.Model.extend({
         label: 'load_partners',
         fields: ['name','street','city','state_id','country_id','vat','lang',
                  'phone','zip','mobile','email','barcode','write_date',
-                 'property_account_position_id','property_product_pricelist'],
+                 'property_account_position_id','property_product_pricelist', 'x_fav_product_id'],
         domain: async function(self){
             if(self.config.limited_partners_loading) {
                 const result = await self.rpc({
@@ -2866,6 +2866,7 @@ exports.Order = Backbone.Model.extend({
         }
 
         this.on('change',              function(){ this.save_to_db("order:change"); }, this);
+        this.orderlines.on('change',   function(){ this.updateFavouriteProductDiscounts(this.get_client()); }, this);
         this.orderlines.on('change',   function(){ this.save_to_db("orderline:change"); }, this);
         this.orderlines.on('add',      function(){ this.save_to_db("orderline:add"); }, this);
         this.orderlines.on('remove',   function(){ this.save_to_db("orderline:remove"); }, this);
@@ -3695,8 +3696,85 @@ exports.Order = Backbone.Model.extend({
     /* ---- Client / Customer --- */
     // the client related to the current order.
     set_client: function(client){
+        this.updateFavouriteProductDiscounts(client);
         this.assert_editable();
         this.set('client',client);
+    },
+    updateFavouriteProductDiscountsByFavProductId: function (fav_product_id) {
+         let orderlines = this.orderlines.models;
+        for (var i = 0; i < orderlines.length; i++) {
+
+            let orderline = orderlines[i];
+
+            let product = orderline.product;
+
+            let currentId = product.id;
+            let discount = orderline.get_discount();
+            let newDiscount = 20;
+            if (currentId === fav_product_id) {
+                // console.log("set_discount");
+                if (discount !== newDiscount) {
+
+                    orderline.set_discount(newDiscount);
+                }
+            } else {
+                if (discount !== 0) {
+
+                    orderline.set_discount(0.0);
+                }
+            }
+        }
+    },
+
+    updateFavouriteProductDiscounts: function(client) {
+        var rpc = this.pos.rpc;
+
+        let self = this;
+
+        if (client) {
+            new Promise(function (resolve, reject) {
+                rpc({
+                    model: 'res.partner',
+                    method: 'search_read',
+                    args: [[
+                        ['id', '=', client.id],
+                    ], ['x_fav_product_id']],
+                }, {
+                    timeout: 3000,
+                    shadow: true,
+                })
+                    .then(function (partners) {
+                        let fetchedClient = partners[0];
+                        if (fetchedClient) {
+                            var fav_product_id = partners[0]['x_fav_product_id'];
+
+                            self.updateFavouriteProductDiscountsByFavProductId(fav_product_id);
+                        } else {
+                            var fav_product_id = client['x_fav_product_id'];
+
+                            self.updateFavouriteProductDiscountsByFavProductId(fav_product_id);
+                        }
+
+                    }, function (type, err) {
+                        console.log("error" + " = " + type + " " + err);
+                        var fav_product_id = client['x_fav_product_id'];
+
+                        self.updateFavouriteProductDiscountsByFavProductId(fav_product_id);
+                        reject();
+                    });
+            });
+        } else {
+              let orderlines = this.orderlines.models;
+            for (var i = 0; i < orderlines.length; i++) {
+                let orderline = orderlines[i];
+                let discount = orderline.get_discount();
+                if(discount !== 0) {
+
+                    orderline.set_discount(0.0);
+                }
+            }
+        }
+
     },
     get_client: function(){
         return this.get('client');
