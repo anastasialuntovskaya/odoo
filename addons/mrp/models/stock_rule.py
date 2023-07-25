@@ -135,7 +135,8 @@ class StockRule(models.Model):
             'picking_type_id': self.picking_type_id.id or values['warehouse_id'].manu_type_id.id,
             'company_id': company_id.id,
             'move_dest_ids': values.get('move_dest_ids') and [(4, x.id) for x in values['move_dest_ids']] or False,
-            'user_id': False,
+            # 'user_id': False,
+            'user_id': product_id.responsible_id.id,
         }
         # Use the procurement group created in _run_pull mrp override
         # Preserve the origin from the original stock move, if available
