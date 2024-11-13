@@ -218,6 +218,8 @@
                 </div>
                 <field name="rule_date_from" class="oe_inline"/>
                 <field name="rule_date_to" class="oe_inline"/>
+                <field name="x_rule_hour_from" class="oe_inline"/>
+                <field name="x_rule_hour_to" class="oe_inline"/>
                 <label string="Coupon Validity" for="validity_duration" class="oe_inline" attrs="{'invisible': [('promo_applicability', '=', 'on_current_order')]}"/>
                 <div attrs="{'invisible': [('promo_applicability', '=', 'on_current_order')]}">
                     <field name="validity_duration" class="oe_inline"/>

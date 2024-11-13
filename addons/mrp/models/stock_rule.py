@@ -210,8 +210,13 @@ class ProcurementGroup(models.Model):
                 for bom_line, bom_line_data in bom_sub_lines:
                     bom_line_uom = bom_line.product_uom_id
                     quant_uom = bom_line.product_id.uom_id
+
+                    x_kit_route_ids = bom_line.product_id.x_kit_route_ids
+                    if not x_kit_route_ids:
+                        x_kit_route_ids = bom_line.product_id.route_ids
+
                     # recreate dict of values since each child has its own bom_line_id
-                    values = dict(procurement.values, bom_line_id=bom_line.id)
+                    values = dict(procurement.values, bom_line_id=bom_line.id, route_ids=x_kit_route_ids)
                     component_qty, procurement_uom = bom_line_uom._adjust_uom_quantities(bom_line_data['qty'], quant_uom)
                     procurements_without_kit.append(self.env['procurement.group'].Procurement(
                         bom_line.product_id, component_qty, procurement_uom,

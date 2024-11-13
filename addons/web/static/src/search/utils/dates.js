@@ -103,6 +103,8 @@ export const INTERVAL_OPTIONS = {
     month: { description: _lt("Month"), id: "month", groupNumber: 1 },
     week: { description: _lt("Week"), id: "week", groupNumber: 1 },
     day: { description: _lt("Day"), id: "day", groupNumber: 1 },
+    weekday: { description: _lt("День недели"), id: "weekday", groupNumber: 1 },
+    hour_of_day: { description: _lt("Час"), id: "hour_of_day", groupNumber: 1 },
 };
 
 // ComparisonMenu parameters

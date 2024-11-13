@@ -329,7 +329,10 @@ class StockMove(models.Model):
         return super()._prepare_procurement_origin()
 
     def _prepare_phantom_move_values(self, bom_line, product_qty, quantity_done):
+        x_source_location_kit = bom_line.product_id.x_source_location_kit
+
         return {
+            'location_id':  x_source_location_kit.id if x_source_location_kit else self.location_id.id,
             'picking_id': self.picking_id.id if self.picking_id else False,
             'product_id': bom_line.product_id.id,
             'product_uom': bom_line.product_uom_id.id,
@@ -344,6 +347,7 @@ class StockMove(models.Model):
         vals = []
         if bom_line.product_id.type in ['product', 'consu']:
             vals = self.copy_data(default=self._prepare_phantom_move_values(bom_line, product_qty, quantity_done))
+
             if self.state == 'assigned':
                 vals['state'] = 'assigned'
         return vals

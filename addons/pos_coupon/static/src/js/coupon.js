@@ -816,6 +816,9 @@ odoo.define('pos_coupon.pos', function (require) {
             // Check rule date
             const ruleFrom = program.rule_date_from ? new Date(program.rule_date_from) : new Date(-8640000000000000);
             const ruleTo = program.rule_date_to ? new Date(program.rule_date_to) : new Date(8640000000000000);
+            // Check rule date
+            const x_rule_hour_from = program.x_rule_hour_from ?? 0;
+            const x_rule_hour_to = program.x_rule_hour_to ?? 24;
             const orderDate = new Date();
             if (!(orderDate >= ruleFrom && orderDate <= ruleTo)) {
                 return {
@@ -823,6 +826,17 @@ odoo.define('pos_coupon.pos', function (require) {
                     reason: 'Program already expired.',
                 };
             }
+
+            if(x_rule_hour_from != 0 || x_rule_hour_to != 0) {
+            const hours = orderDate.getHours();
+                if (!(hours >= x_rule_hour_from && hours <= x_rule_hour_to)) {
+                    return {
+                        successful: false,
+                        reason: 'Not valid hours.',
+                    };
+                }
+            }
+
 
             // Check max number usage
             if (program.maximum_use_number !== 0) {

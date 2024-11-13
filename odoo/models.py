@@ -2278,6 +2278,8 @@ class BaseModel(metaclass=MetaModel):
                 # Mixing both formats, e.g. 'MMM YYYY' would yield wrong results,
                 # such as 2006-01-01 being formatted as "January 2005" in some locales.
                 # Cfr: http://babel.pocoo.org/en/latest/dates.html#date-fields
+                'weekday': 'E',
+                'hour_of_day': 'HH:00',
                 'hour': 'hh:00 dd MMM',
                 'day': 'dd MMM yyyy', # yyyy = normal year
                 'week': "'W'w YYYY",  # w YYYY = ISO week-year
@@ -2286,6 +2288,8 @@ class BaseModel(metaclass=MetaModel):
                 'year': 'yyyy',
             }
             time_intervals = {
+                'weekday': dateutil.relativedelta.relativedelta(hours=1),
+                'hour_of_day': dateutil.relativedelta.relativedelta(hours=1),
                 'hour': dateutil.relativedelta.relativedelta(hours=1),
                 'day': dateutil.relativedelta.relativedelta(days=1),
                 'week': datetime.timedelta(days=7),
@@ -2295,7 +2299,13 @@ class BaseModel(metaclass=MetaModel):
             }
             if tz_convert:
                 qualified_field = "timezone('%s', timezone('UTC',%s))" % (self._context.get('tz', 'UTC'), qualified_field)
-            qualified_field = "date_trunc('%s', %s::timestamp)" % (gb_function or 'month', qualified_field)
+            if gb_function == 'weekday':
+                qualified_field = "DATE_PART('%s', %s::timestamp)" % ('dow', qualified_field)
+            elif gb_function == 'hour_of_day':
+                qualified_field = "DATE_PART('%s', %s::timestamp)" % ('hour', qualified_field)
+            else:
+                qualified_field = "date_trunc('%s', %s::timestamp)" % (gb_function or 'month', qualified_field)
+
         if field_type == 'boolean':
             qualified_field = "coalesce(%s,false)" % qualified_field
         return {
@@ -2316,14 +2326,37 @@ class BaseModel(metaclass=MetaModel):
             values are converted to False, and the date/datetime are formatted,
             and corrected according to the timezones.
         """
-        value = False if value is None else value
+
         gb = groupby_dict.get(key)
-        if gb and gb['type'] in ('date', 'datetime') and value:
-            if isinstance(value, str):
-                dt_format = DEFAULT_SERVER_DATETIME_FORMAT if gb['type'] == 'datetime' else DEFAULT_SERVER_DATE_FORMAT
-                value = datetime.datetime.strptime(value, dt_format)
-            if gb['tz_convert']:
-                value = pytz.timezone(self._context['tz']).localize(value)
+        if gb and  gb['groupby'] in ('date:weekday'):
+            # value = False if value is None else value
+            if gb and gb['type'] in ('date', 'datetime'):
+                if type(value) == int or type(value) == float:
+                    if gb['groupby'] in ('date:weekday'):
+                        value = datetime.datetime(2019, 12, int(value) + 1, 12)
+
+                if isinstance(value, str):
+                    dt_format = DEFAULT_SERVER_DATETIME_FORMAT if gb[
+                                                                      'type'] == 'datetime' else DEFAULT_SERVER_DATE_FORMAT
+                    value = datetime.datetime.strptime(value, dt_format)
+                if gb['tz_convert']:
+                    value = pytz.timezone(self._context['tz']).localize(value)
+        else:
+            value = False if value is None else value
+
+            # value = False if value is None else value
+            if gb and gb['type'] in ('date', 'datetime') and value:
+                if type(value) == int or type(value) == float:
+                    if gb['groupby'] in ('date:hour_of_day'):
+                        value = datetime.datetime(2019, 12, 1, int(value))
+
+                if isinstance(value, str):
+                    dt_format = DEFAULT_SERVER_DATETIME_FORMAT if gb[
+                                                                      'type'] == 'datetime' else DEFAULT_SERVER_DATE_FORMAT
+                    value = datetime.datetime.strptime(value, dt_format)
+                if gb['tz_convert']:
+                    value = pytz.timezone(self._context['tz']).localize(value)
+
         return value
 
     @api.model
@@ -2594,8 +2627,11 @@ class BaseModel(metaclass=MetaModel):
             # want to display empty columns anyway, so we should apply the fill_temporal logic
             if not isinstance(fill_temporal, dict):
                 fill_temporal = {}
-            data = self._read_group_fill_temporal(data, groupby, aggregated_fields,
-                                                  annotated_groupbys, **fill_temporal)
+            if gb['groupby'] in ('date:weekday'):
+                data = data
+            else:
+                data = self._read_group_fill_temporal(data, groupby, aggregated_fields,
+                                                      annotated_groupbys, **fill_temporal)
 
         result = [self._read_group_format_result(d, annotated_groupbys, groupby, domain) for d in data]
 
