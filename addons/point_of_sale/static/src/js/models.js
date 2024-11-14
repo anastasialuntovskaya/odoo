@@ -3079,6 +3079,8 @@ exports.Order = Backbone.Model.extend({
             orderlines: orderlines,
             paymentlines: paymentlines,
             subtotal: this.get_subtotal(),
+            // for coupon happy hours better printing - provide rewards to pritnign server
+            rewardsContainer: this.rewardsContainer,
             total_with_tax: this.get_total_with_tax(),
             total_rounded: this.get_total_with_tax() + this.get_rounding_applied(),
             total_without_tax: this.get_total_without_tax(),

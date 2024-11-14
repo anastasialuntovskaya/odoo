@@ -947,7 +947,9 @@ odoo.define('pos_coupon.pos', function (require) {
             const amountsToDiscount = {};
             for (let line of this._getRegularOrderlines()) {
                 if (program.discount_specific_product_ids.has(line.get_product().id)) {
-                    const key = this._getGroupKey(line);
+                    //const key = this._getGroupKey(line);
+                    // for coupon happy hours better printing - ungroup coupon program discount
+                    const key = line.id;
                     if (!(key in amountsToDiscount)) {
                         amountsToDiscount[key] = line.get_quantity() * line.price;
                     } else {
@@ -1034,6 +1036,8 @@ odoo.define('pos_coupon.pos', function (require) {
         _createDiscountRewards: function (program, coupon_id, amountsToDiscount) {
             const discountRewards = Object.entries(amountsToDiscount).map(([tax_keys, amount]) => {
                 let discountAmount = (amount * program.discount_percentage) / 100.0;
+                // for coupon happy hours better printing - rounding
+                discountAmount = Math.round(discountAmount);
                 discountAmount = Math.min(discountAmount, program.discount_max_amount || Infinity);
                 return new Reward({
                     product: this.pos.db.get_product_by_id(program.discount_line_product_id[0]),
