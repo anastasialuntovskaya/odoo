@@ -790,12 +790,12 @@ odoo.define('pos_coupon.pos', function (require) {
                     return program.valid_product_ids.has(line.product.id);
                 })
                 .reduce((total, line) => total + line.quantity, 0);
-            if (!(validQuantity >= program.rule_min_quantity)) {
-                return {
-                    successful: false,
-                    reason: "Program's minimum quantity is not satisfied.",
-                };
-            }
+            // if (!(validQuantity >= program.rule_min_quantity)) {
+            //     return {
+            //         successful: false,
+            //         reason: "Program's minimum quantity is not satisfied.",
+            //     };
+            // }
 
             // Bypass other rules if program is coupon_program
             if (program.program_type === 'coupon_program') {
